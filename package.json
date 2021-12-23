@@ -1,0 +1,21 @@
+{
+  "name": "zmfh",
+  "version": "1.0.0",
+  "description": "Frontend for Zoneminder - For humans by humans",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Raskitoma - https://raskitoma.com",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^16.0.4"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "electron-json-config": "^1.5.3",
+    "electron-store": "^8.0.1",
+    "electron-window-state": "^5.0.3",
+    "jquery": "^3.6.0"
+  }
+}

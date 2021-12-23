@@ -1,0 +1,53 @@
+.titlebar {
+    -webkit-user-select: none;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.app-draggable {
+  -webkit-app-region: drag;
+}
+
+.login-background {
+  background: url('./assets/img/cctvlog.png') no-repeat;
+  background-size: contain;
+}
+
+.card-groups {
+  width: fit-content;
+
+}
+
+.video-sub {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 130px;
+  margin: 10px;
+}
+
+.video-main {
+  width: inherit;
+  height: inherit;
+  margin: 1px;
+}
+
+.row-separator {
+  height: 5px;
+}
+
+.col-separator {
+  width: 2px;
+}
+
+.v-sub {
+  width:auto;
+  height: 100px;
+}
+
+.v-main {
+  width: 100%;
+  height: auto;
+}
