@@ -21,31 +21,47 @@ function zm_get_monitors_from_group(my_group, group_name) {
 function zm_open_group(my_group, group_name, v_main, v_sub) {
     monitors = zm_get_monitors_from_group(my_group, group_name);
     console.log(monitors, v_main, v_sub);
-    //document.getElementById(v_main).innerHTML = '';
-    //document.getElementById(v_sub).innerHTML = '';
-    $("#" + v_main).empty();
-    $("#" + v_sub).empty();
-
-
+    console.log('Cleaning containers');
+    document.getElementById(v_sub).innerHTML = ' ';
+  
     first_monitor = monitors[0];
  
+    console.log('Drawing childs!');
+
     for (var monitor in monitors) {
         zm_connkey = Math.floor(100000 + Math.random() * 900000)
         zm_rand = Math.floor(10000 + Math.random() * 90000)
         html_obj_vsub = '<a onclick="zm_upd_main(' + monitors[monitor] + ',\''+ v_main + '\')"><img class="v-sub" src="' + zm_url_base + "/cgi-bin/nph-zms?scale=50&width=" + sub_width + "&height=" + sub_height + "&mode=jpeg&maxfps=5&buffer=1000&monitor=" + monitors[monitor] + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand + '" /></a><div class="topbar-divider col-separator">-</div>';
         document.getElementById(v_sub).innerHTML += html_obj_vsub;
+        console.log(html_obj_vsub);
     }
+
+    console.log('Calling main!');
+
     zm_upd_main(first_monitor, v_main);
+
+    console.log('Done!');
+    console.log('------------------------------------');
+
 }
 
 function zm_upd_main(monitor, v_main) {
+    console.log('------------------ Drawing Main ------------------');
+    console.log(v_main);
+    console.log(document.getElementById(v_main).innerHTML.length);
     console.log(monitor);
+    console.log('Cleaning containers');
+    document.getElementById(v_main).innerHTML = '';
+    console.log(document.getElementById(v_main).innerHTML.length);
     zm_connkey = Math.floor(100000 + Math.random() * 900000)
     zm_rand = Math.floor(10000 + Math.random() * 90000)
     html_obj_vmain = '<img class="v-main" src="' + zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "&height=" + main_height + "&mode=jpeg&maxfps=5&buffer=1000&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand + '" />';
     // html_obj_vmain = '<img class="v-main" src="' + zm_url_base + "/cgi-bin/nph-zms?scale=100&mode=jpeg&maxfps=30&buffer=1000&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand + '" />';
     console.log(html_obj_vmain);
-    document.getElementById(v_main).innerHTML = html_obj_vmain;
+    console.log('Drawing main!');
+    if (document.getElementById(v_main).innerHTML.length == 0) {
+        document.getElementById(v_main).innerHTML = html_obj_vmain;
+    }
 }
 
 // if window is ready

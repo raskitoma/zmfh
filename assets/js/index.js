@@ -8,6 +8,8 @@ zm_groups = store.get('zm_groups');
 
 zm_token = '';
 
+let main_width = $(window).width();
+let main_height = $(window).height();
 let sub_width = 400;
 let sub_height = 300;
 

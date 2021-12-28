@@ -49,7 +49,7 @@ function createWindows () {
         child.show()
     })
 
-    // child.openDevTools()
+    child.openDevTools()
 
     win.openDevTools()
 }
