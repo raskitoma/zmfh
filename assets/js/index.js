@@ -7,11 +7,16 @@ const axios = require('axios');
 zm_groups = store.get('zm_groups');
 
 zm_token = '';
+zm_auth = '';
 
-let main_width = $(window).width();
-let main_height = $(window).height();
+let main_width = 800 // $(window).width();
+let main_height = 600 // $(window).height();
 let sub_width = 400;
 let sub_height = 300;
+let zm_bufm = '100';
+let zm_bufs = '10';
+let zm_fpsm = '30';
+let zm_fpss = '5';    
 
 if (store.get('zmServer') != null) {
     $('#zmServer').val(store.get('zmServer'))
@@ -35,7 +40,7 @@ if (store.get('zmToken') != null) {
         path: zm_path
     }
 
-    zm_url_base = options.protocol + '//' + options.host + ':' + options.port + options.path
+    zm_url_base = options.protocol + '//'  + options.host + ':' + options.port + options.path
     
     headers = {
         'Authorization': 'Basic ' + store.get('zmToken'),
@@ -50,6 +55,7 @@ if (store.get('zmToken') != null) {
         if (response.statusText == 'OK') {
             console.log('Token is valid, logging in')
             zm_token = store.get('zmToken')
+            zm_auth = store.get('zmAuth')
             ipc.send('login-success', response.statusText)
         } else {
             console.log('Token is invalid, logging out')

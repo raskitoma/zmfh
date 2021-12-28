@@ -89,6 +89,7 @@ $('#btn-login').on('click', () => {
             console.log('login success')
             store.set('zmServer', $('#zmServer').val())
             store.set('zmToken', response.data.access_token)
+            store.set('zmAuth', response.data.credentials)
             store.set('zmUsr', txtUser)
             ipc.send('login-success', response.statusText)
         } else {
