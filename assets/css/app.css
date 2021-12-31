@@ -12,7 +12,7 @@
 }
 
 .login-background {
-  background: url('assets/img/cctvlog.png') no-repeat;
+  background: url('../img/cctvlog.png') no-repeat;
   background-size: contain;
 }
 
@@ -44,7 +44,9 @@
 }
 
 .box .row {
+/*
   border: 1px dotted gray;
+*/
 }
 
 .box .row.header {
@@ -106,4 +108,19 @@
   width: auto;
   height: inherit;
   margin: 10px;
+}
+
+.darkBody {
+  background-color: gray;
+  filter:alpha(opacity=60); /* IE */
+  opacity: 0.5; /* Safari, Opera */
+  -moz-opacity:0.50; /* FireFox */
+  z-index: 20;
+  height: 100%;
+  width: 100%;
+  background-repeat:no-repeat;
+  background-position:center;
+  position:absolute;
+  top: 0px;
+  left: 0px;  
 }

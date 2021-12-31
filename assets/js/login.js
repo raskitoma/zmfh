@@ -81,10 +81,12 @@ $('#btn-login').on('click', () => {
 
     zm_url = options.protocol + '//' + options.host + ':' + options.port + options.path + '/login.json'
 
-    console.log('sending request:' + zm_url)
+    $('#zmmsg').text('Logging in...')
+    $('#zmmsg').html('<img src="assets/img/loading.gif" width="20" height="20" />')
     
     axios.post(zm_url, params, headers)
     .then(function (response) {
+        console.log(response)
         if (response.statusText == 'OK') {
             console.log('login success')
             store.set('zmServer', $('#zmServer').val())
@@ -93,9 +95,12 @@ $('#btn-login').on('click', () => {
             store.set('zmUsr', txtUser)
             ipc.send('login-success', response.statusText)
         } else {
-            console.log('login failed')
-            $('#lbl').text('Login failed')
+            $('#zmmsg').text('Login failed')
         }
+    })
+    .catch(function (error) {
+        console.log(error)
+        $('#zmmsg').text('Login failed: ' + error)
     })
 
 }) 

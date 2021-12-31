@@ -79,10 +79,12 @@ $(window).on('load', function() {
 })
 
 $('#btn-exit').on('click', function() {
+    dimOn();
     ipc.send('exit-app', 'GOODBYE')
 })
 
 $('#btn-logoff').on('click', function() {
+    dimOn();
     store.delete('zmToken')
     ipc.send('login-out', 'LOGOUT')
 })

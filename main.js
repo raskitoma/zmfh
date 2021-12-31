@@ -24,7 +24,7 @@ function createWindows () {
         height: 1080,
         show: false,
         frame: false,
-        icon: path.join(__dirname, './assets/img/bot.png'),
+        icon: path.join(__dirname, 'assets/img/bot.png'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -38,7 +38,7 @@ function createWindows () {
         frame: false,
         resizable: false,
         show: false,
-        icon: path.join(__dirname, './assets/img/bot.png'),
+        icon: path.join(__dirname, 'assets/img/bot.png'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -49,7 +49,7 @@ function createWindows () {
         child.show()
     })
 
-    child.openDevTools()
+    // child.openDevTools()
 
     win.openDevTools()
 }
@@ -57,8 +57,8 @@ function createWindows () {
 
 ipcMain.on('login-success', (event, arg) => {
     if(arg=='OK'){
-        win.show()
         child.hide()
+        win.show()
     }
 })
 

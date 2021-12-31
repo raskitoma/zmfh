@@ -18,6 +18,15 @@ let zm_bufs = '10';
 let zm_fpsm = '30';
 let zm_fpss = '5';    
 
+function dimOff() {
+    document.getElementById("darkLayer").style.display = "none";
+}
+
+function dimOn() {
+    document.getElementById("darkLayer").style.display = "";
+}
+
+// Getting vars from store
 if (store.get('zmServer') != null) {
     $('#zmServer').val(store.get('zmServer'))
     var zm_parsed = require('url').parse(store.get('zmServer'))
@@ -57,7 +66,9 @@ if (store.get('zmToken') != null) {
             zm_token = store.get('zmToken')
             zm_auth = store.get('zmAuth')
             ipc.send('login-success', response.statusText)
+            dimOff();
         } else {
+            dimOn();
             console.log('Token is invalid, logging out')
             store.delete('zmToken')
             ipc.send('login-out', 'LOGOUT')
@@ -65,3 +76,4 @@ if (store.get('zmToken') != null) {
     })
 
 }
+
