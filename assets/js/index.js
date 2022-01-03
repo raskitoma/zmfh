@@ -18,6 +18,10 @@ let zm_bufs = '10';
 let zm_fpsm = '30';
 let zm_fpss = '5';    
 
+// Control variables
+var current_group = 0;
+var current_monitor = 0;
+
 function dimOff() {
     document.getElementById("darkLayer").style.display = "none";
 }
@@ -62,6 +66,7 @@ if (zm_token) {
     }
 
     zm_url = zm_url_base + '/api/groups.json?token=' + store.get('zmToken')
+    zm_events_url = zm_url_base + '/api/events.json?token=' + store.get('zmToken')
 }
 
 // Checking session status    
@@ -72,4 +77,20 @@ const check_session = async () => {
         // Handle Error Here
         console.error(err);
     }
+}
+
+const get_events = async () => {
+    try {
+        zm_events_url = ''
+        const resp = await axios.get(zm_url, {headers: headers});
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+}
+
+
+function zm_draw_events() {
+
+
 }

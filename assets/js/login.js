@@ -93,6 +93,7 @@ $('#btn-login').on('click', () => {
             store.set('zmToken', response.data.access_token)
             store.set('zmAuth', response.data.credentials)
             store.set('zmUsr', txtUser)
+            store.set('zmPwd', txtPwd)
             ipc.send('login-success', response.statusText)
         } else {
             $('#zmmsg').text('Login failed')

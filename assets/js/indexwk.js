@@ -22,6 +22,11 @@ function zm_get_monitors_from_group(my_group, group_name) {
 }
 
 function zm_open_group(my_group, group_name, v_main, v_sub) {
+    if (current_group == my_group) {
+        return
+    } else {
+        current_group = my_group;
+    }
     monitors = zm_get_monitors_from_group(my_group, group_name);
     console.log(monitors, v_main, v_sub);
     var video_sub = document.getElementById(v_sub);
@@ -38,30 +43,30 @@ function zm_open_group(my_group, group_name, v_main, v_sub) {
         video_sub.innerHTML += vsub_href;
         var vsub_obj = document.getElementById('vsub_' + monitor);
         console.log('vsub_' + monitor, vsub_obj);
-        vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&width=" + sub_width + "&height=" + sub_height + "&mode=jpeg&maxfps=" + zm_fpss + "&buffer=" + zm_bufs + "&monitor=" + monitors[monitor] + "&token=" + zm_token + "&" + zm_auth + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
+        vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&width=" + sub_width + "&height=" + sub_height + "&mode=jpeg&maxfps=" + zm_fpss + "&buffer=" + zm_bufs + "&monitor=" + monitors[monitor] + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
         var zm_sub_img = new Image();
         zm_sub_img.setAttribute('class', 'video-sub shadow-sm');
         zm_sub_img.src = vsub_src;
         vsub_obj.appendChild(zm_sub_img);
     }
 
-    console.log('Calling main!');
-
-    zm_upd_main(first_monitor, v_main);
-
-    console.log('Done!');
-    console.log('-------------- Done Whole Drawing Procedure ----------------------');
+    // zm_upd_main(first_monitor, v_main);
 
 }
 
 function zm_upd_main(monitor, v_main) {
+    if (current_monitor == monitor) {
+        return
+    } else {
+        current_monitor = monitor;
+    }
     console.log('------------------ Drawing Main Monitor ' + monitor + '------------------');
     zm_connkey = Math.floor(100000 + Math.random() * 900000)
     zm_rand = Math.floor(10000 + Math.random() * 90000)
     var video_main = document.getElementById(v_main);
     var zm_main_img = new Image();
     zm_main_img.setAttribute('class', 'video-main app-draggable');
-    zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "&height=" + main_height + "&mode=jpeg&maxfps=" + zm_fpsm + "&buffer=" + zm_bufm + "&monitor=" + monitor + "&token=" + zm_token + "&" + zm_auth + "&connkey=" + zm_connkey + "#rand=" + zm_rand;
+    zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "&height=" + main_height + "&mode=jpeg&maxfps=" + zm_fpsm + "&buffer=" + zm_bufm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "#rand=" + zm_rand;
     zm_main_img.src = zm_img_src;
     video_main.innerHTML = "";
     video_main.appendChild(zm_main_img);
