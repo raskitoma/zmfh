@@ -1,14 +1,14 @@
-let $ = require('jquery');
-const ipc = require('electron').ipcRenderer;
+const axios = require('axios');
 const Store = require('electron-store');
 const store = new Store();
-const axios = require('axios');
+let $ = require('jquery');
 
 zm_groups = store.get('zm_groups');
-
+console.log(zm_groups);
 zm_token = '';
 zm_auth = '';
 
+// This setttings must be changed accordingly to the devices and moved to json file
 let main_width = 800 // $(window).width();
 let main_height = 600 // $(window).height();
 let sub_width = 400;
@@ -30,7 +30,6 @@ function dimOn() {
 if (store.get('zmServer') != null) {
     $('#zmServer').val(store.get('zmServer'))
     var zm_parsed = require('url').parse(store.get('zmServer'))
-    console.log(zm_parsed)
     zm_protocol = zm_parsed.protocol
     zm_host = zm_parsed.hostname
     zm_port = zm_parsed.port
@@ -40,6 +39,12 @@ if (store.get('zmServer') != null) {
 var zm_url_base = '' 
 
 if (store.get('zmToken') != null) {
+    var zm_auth = store.get('zmAuth');
+    var zm_token = store.get('zmToken');
+    var zm_usr = store.get('zmUsr');
+}
+
+if (zm_token) {
     // Token exists, confirm it and login
     let options = {
         method: 'GET',
@@ -57,23 +62,14 @@ if (store.get('zmToken') != null) {
     }
 
     zm_url = zm_url_base + '/api/groups.json?token=' + store.get('zmToken')
-
-    // checking if token is valid, if not, logout from app
-    axios.get(zm_url, {headers: headers})
-    .then(function (response) {
-        if (response.statusText == 'OK') {
-            console.log('Token is valid, logging in')
-            zm_token = store.get('zmToken')
-            zm_auth = store.get('zmAuth')
-            ipc.send('login-success', response.statusText)
-            dimOff();
-        } else {
-            dimOn();
-            console.log('Token is invalid, logging out')
-            store.delete('zmToken')
-            ipc.send('login-out', 'LOGOUT')
-        }
-    })
-
 }
 
+// Checking session status    
+const check_session = async () => {
+    try {
+        const resp = await axios.get(zm_url, {headers: headers});
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+}

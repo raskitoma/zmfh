@@ -82,7 +82,7 @@ $('#btn-login').on('click', () => {
     zm_url = options.protocol + '//' + options.host + ':' + options.port + options.path + '/login.json'
 
     $('#zmmsg').text('Logging in...')
-    $('#zmmsg').html('<img src="assets/img/loading.gif" width="20" height="20" />')
+    $('#zmmsg').html('<img src="assets/img/loading.gif" width="15" height="15" />')
     
     axios.post(zm_url, params, headers)
     .then(function (response) {
@@ -99,7 +99,6 @@ $('#btn-login').on('click', () => {
         }
     })
     .catch(function (error) {
-        console.log(error)
         $('#zmmsg').text('Login failed: ' + error)
     })
 

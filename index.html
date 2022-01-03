@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>ZMFH - Zoneminder for Humans by Humans...</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" crossorigin="anonymous">
@@ -36,8 +37,8 @@
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 app-draggable">
           <div class="container-fluid d-flex flex-column p-0">
             <div class="text-white opttitle"><i class="fa fa-video-camera objspacer"></i><span> Groups</span></div> 
-            <div class="card shadow mb-3 zmgroups">
-              <div class="card-body" id="zm_groups"></div>
+            <div class="card shadow mb-3">
+              <div class="card-body zm_groups" id="zm_groups"></div>
             </div>
             <div class="text-center d-none d-md-inline">
               <button class="btn rounded-circle border-0 no-drag" id="sidebarToggle" type="button"></button>
@@ -51,23 +52,21 @@
           <div class="row row-separator-big"></div>
 
           <!-- Main Reel -->
-          <div class="row mainreel">
-            <div class="card shadow mb-4" id="v_main"></div>
+          <div class="row shadow mainreel">
+              <div id="v_main"></div>
           </div>
 
-          <div class="row row-separator"></div>
+          <div class="row row-separator-big"></div>
           
           <!-- Subreel -->
-          <div class="row subreel">
-            <div class="card shadow mb-4">  
-              <div class="card-body shadow-sm" id="v_sub"></div>
-            </div>
+          <div class="row shadow subreel">
+              <div id="v_sub"></div>
           </div>
 
           <div class="row row-separator"></div>
 
         <!--- Footer -->
-        <footer class="bg-white fixed-bottom">
+        <footer class="bg-white fixed-bottom app-draggable">
           <div class="container my-auto">
             <div class="text-center my-auto copyright">Copyright © Raskitoma, 2021</div>
           </div>
