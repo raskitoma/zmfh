@@ -52,8 +52,8 @@ function zm_open_group(my_group, group_name, v_main, v_sub) {
         sub_img.setAttribute('class', vsub_class);
         sub_img.setAttribute('src', vsub_src);
         sub_img.setAttribute('id', 'vv_' + monitor_id);
-        sub_img.setAttribute('on_load', function(vsub_src){
-            setTimeout(function(vsub_src){
+        sub_img.setAttribute('on_load', function(){
+            setTimeout(function(){
                 document.getElementById('vv_' + monitor_id).src = vsub_src;
             }, zm_subreel_request);
         });
@@ -81,21 +81,13 @@ function zm_upd_main(monitor, v_main) {
         return true;
     }
     var zm_connkey = Math.floor(100000 + Math.random() * 900000)
-    var zm_rand = Math.floor(10000 + Math.random() * 90000)
     var zm_main_img = new Image();
-    zm_main_img.setAttribute('class', 'video-main app-draggable');
-    var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=single&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "#rand=" + zm_rand;
+    zm_main_img.setAttribute('class', 'video-main no-drag' ); // app-draggable');
+    var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     zm_main_img.src = zm_img_src;
     zm_main_img.setAttribute('id', 'v_main_x');
-    zm_main_img.setAttribute('on_load', function(e = zm_img_src){
-        console.log(e);
-        setTimeout(function(e){
-            console.log( e);
-            document.getElementById('v_main_x').src = zm_img_src;
-        }, zm_mainreel_request);
-    });
-
     video_main.appendChild(zm_main_img);
+    //refresh_main();
     return true;
 }
 
@@ -116,6 +108,23 @@ function zm_main_playback() {
         src: source.getAttribute('src'),
         type: source.getAttribute('type'),
     });    
+    return true;
+}
+
+function refresh_main () {
+    console.log('refresh_main');
+    var obj = document.getElementById('v_main_x');
+    if (!obj) {
+        setTimeout( refresh_main(), zm_mainreel_request );
+        return true;
+    }
+    if (!obj.complete){
+        console.log('refresh_main: not completed');
+        setTimeout( refresh_main(), zm_mainreel_request );
+        return true;
+    }
+    var zm_rand = Math.floor(10000 + Math.random() * 90000)
+    obj.src = zm_img_src + '#rand=' + zm_rand;
     return true;
 }
 
