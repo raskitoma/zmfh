@@ -126,3 +126,27 @@
   top: 0px;
   left: 0px;  
 }
+
+.vid_hidden {
+  display: none;
+}
+
+.mini_screen {
+  width: auto;
+  height: 130px;
+  overflow: hidden;
+  border: 0;
+}
+
+.sub_video_body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 0;
+  margin:auto;
+}
+
+.sub_video_img {
+ width: auto; 
+ max-height: 130px;
+}

@@ -1,10 +1,7 @@
 // Modules to control application life and create native browser window
 const electron = require('electron');
-const { app, BrowserWindow, ipcMain, globalShortcut, Menu } = electron;
-//const windowStateKeeper = require('electron-window-state');
-//const {dialog} = require('electron')
+const { app, BrowserWindow, ipcMain } = electron;
 const path = require('path');
-//const url = require('url');
 const fs = require('fs');
 const Store = require('electron-store');
 const store = new Store();

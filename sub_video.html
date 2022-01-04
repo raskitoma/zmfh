@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="assets/css/app.css">
+    </head>
+    <body class="sub_video_body">
+        <div id="master_video">
+        </div>
+        <script>
+            window.addEventListener("message", sub_msg, false)
+            function sub_msg(event){
+                if(event) {
+                    console.log(event);
+                }
+            }
+            function load_img(img_src, img_class) {
+                var img = document.createElement("img");
+                img.src = img_src;
+                img.className = img_class;
+                target_obj = document.getElementById("master_video");
+                target_obj.appendChild(img);
+                return true;
+            }
+
+        </script>
+    </body>
+</html>

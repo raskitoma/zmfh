@@ -16,6 +16,11 @@
     "electron-json-config": "^1.5.3",
     "electron-store": "^8.0.1",
     "electron-window-state": "^5.0.3",
-    "jquery": "^3.6.0"
+    "express": "^4.17.2",
+    "jquery": "^3.6.0",
+    "mjpeg-camera": "^2.0.0",
+    "mjpeg-proxy": "^0.3.0",
+    "ps-tree": "^1.2.0",
+    "pstree": "^0.1.0"
   }
 }

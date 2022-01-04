@@ -95,12 +95,15 @@ $('#btn-login').on('click', () => {
             store.set('zmUsr', txtUser)
             store.set('zmPwd', txtPwd)
             ipc.send('login-success', response.statusText)
+            return true;
         } else {
             $('#zmmsg').text('Login failed')
+            return false;
         }
     })
     .catch(function (error) {
         $('#zmmsg').text('Login failed: ' + error)
+        return false;
     })
 
 }) 
