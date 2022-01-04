@@ -48,6 +48,7 @@ function zm_open_group(my_group, group_name, v_main, v_sub) {
         var vsub_obj = document.getElementById('vsub_' + monitor_id);
         sub_img = new Image(); 
         vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitor_id + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
+        console.log(vsub_src);
         vsub_class = 'video-sub no-drag shadow';
         sub_img.setAttribute('class', vsub_class);
         sub_img.setAttribute('src', vsub_src);
