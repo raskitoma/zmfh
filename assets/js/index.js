@@ -19,6 +19,7 @@ var zm_live_mode = true;
 var cached_subs = [];
 var zm_img_src = '';
 var vsub_src = '';
+var liveMode=0;
 
 // This setttings must be changed accordingly to the devices and moved to json file
 let main_width = 800 // $(window).width();

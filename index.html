@@ -36,15 +36,16 @@
         <!-- Options menu -->
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 app-draggable">
           <div class="container-fluid d-flex flex-column p-0">
-            <div class="text-white opttitle"><i class="fa fa-video-camera objspacer"></i><span> Groups</span></div> 
-            <div class="card shadow mb-3">
-              <div class="card-body zm_groups" id="zm_groups"></div>
-            </div>
+            <div class="text-white opttitle"><i class="fa fa-video-camera objspacer"></i><span> Live</span></div> 
             <div class="text-white opttitle"><i class="fa fa-clock objspacer"></i><span> Events</span></div> 
             <div class="card shadow mb-3">
               <div class="card-body zm_events">
                 <select id="zm_events" class="form-control no-drag" ></select>
               </div>
+            </div>
+            <div class="text-white opttitle"><i class="fa fa-video-camera objspacer"></i><span> Groups</span></div> 
+            <div class="card shadow mb-3">
+              <div class="card-body zm_groups" id="zm_groups"></div>
             </div>
             <div class="text-white opttitle"><i class="fa fa-ey objspacer"></i><span> Mode</span></div> 
             <div class="card shadow mb-3">
@@ -69,6 +70,124 @@
               Your browser does not support the video tag.
               </video>              
           </div>
+          <div class="row row-separator"></div>
+
+
+          
+
+          <div id="flipMontageHeader">
+        
+            <div class="controlHeader">
+              <!-- Used to submit the form with the enter key -->
+              <input type="submit" class="hide">
+              <input type="hidden" name="filtering" value="">
+            <span id="groupControl"><label>Group</label><select name="GroupId[]" id="GroupId[]" data-on-change="submitThisForm" class="chosen" multiple="multiple" data-placeholder="All" style="display: none;">
+            <option value="2">Labs</option>
+            <option value="3">Office</option>
+            <option value="4">Subs</option>
+            </select><div class="chosen-container chosen-container-multi" title="" id="GroupId___chosen" style="width: 71px;"><ul class="chosen-choices">
+              <li class="search-field">
+                <input class="chosen-search-input default" type="text" autocomplete="off" value="All" style="width: 39px;">
+              </li>
+            </ul>
+            <div class="chosen-drop">
+              <ul class="chosen-results"></ul>
+            </div></div></span>
+            <span class="MonitorNameFilter"><label>Name</label><input type="text" name="MonitorName" value="" placeholder="text or regular expression"></span>
+            <span class="FunctionFilter"><label>Function</label><select name="Function[]" id="Function[]" data-on-change="submitThisForm" class="chosen" multiple="multiple" data-placeholder="All" style="display: none;">
+            <option value="None">None</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Modect">Modect</option>
+            <option value="Record">Record</option>
+            <option value="Mocord">Mocord</option>
+            <option value="Nodect">Nodect</option>
+            </select><div class="chosen-container chosen-container-multi" title="" id="Function___chosen" style="width: 82px;"><ul class="chosen-choices">
+              <li class="search-field">
+                <input class="chosen-search-input default" type="text" autocomplete="off" value="All" style="width: 39px;">
+              </li>
+            </ul>
+            <div class="chosen-drop">
+              <ul class="chosen-results"></ul>
+            </div></div></span>
+            <span class="StatusFilter"><label>Status</label><select name="Status[]" id="Status[]" data-on-change="submitThisForm" class="chosen" multiple="multiple" data-placeholder="All" style="display: none;">
+            <option value="Unknown">Unknown</option>
+            <option value="NotRunning">Not Running</option>
+            <option value="Running">Not Capturing</option>
+            <option value="Connected">Capturing</option>
+            </select><div class="chosen-container chosen-container-multi" title="" id="Status___chosen" style="width: 124px;"><ul class="chosen-choices">
+              <li class="search-field">
+                <input class="chosen-search-input default" type="text" autocomplete="off" value="All" style="width: 39px;">
+              </li>
+            </ul>
+            <div class="chosen-drop">
+              <ul class="chosen-results"></ul>
+            </div></div></span>
+            <span class="SourceFilter"><label>Source</label><input type="text" name="Source" value="" placeholder="text or regular expression"></span>
+            <span class="MonitorFilter"><label>Monitor</label><select name="MonitorId[]" id="MonitorId[]" data-on-change="submitThisForm" class="chosen" multiple="multiple" data-placeholder="All" style="display: none;">
+            <option value="4">4 Lab 1 - Front Door Main</option>
+            <option value="12">12 Lab 1 - Front Door Sub</option>
+            <option value="5">5 Lab 2 - Work Area Main</option>
+            <option value="11">11 Lab 2 - Work Area Sub</option>
+            <option value="1">1 Lab 3 - Shipping</option>
+            <option value="3">3 Lab 4 - Freezer</option>
+            <option value="8">8 Lab 5 - Networking</option>
+            <option value="6">6 Office 1 - Front Door Main</option>
+            <option value="13">13 Office 1 - Front Door Sub</option>
+            <option value="7">7 Office 2 - Work Area Main</option>
+            <option value="14">14 Office 2 - Work Area Sub</option>
+            <option value="2">2 Office 3 - Networking</option>
+            </select><div class="chosen-container chosen-container-multi" title="" id="MonitorId___chosen" style="width: 219px;"><ul class="chosen-choices">
+              <li class="search-field">
+                <input class="chosen-search-input default" type="text" autocomplete="off" value="All" style="width: 39px;">
+              </li>
+            </ul>
+            <div class="chosen-drop">
+              <ul class="chosen-results"></ul>
+            </div></div></span>
+            </div>
+                    <div id="DateTimeDiv" style="display: inline-flex;">
+                      <input type="text" name="minTime" id="minTime" value="2022-01-14 14:13:10" class="hasDatepicker"> to 
+                      <input type="text" name="maxTime" id="maxTime" value="2022-01-14 15:13:09" class="hasDatepicker">
+                    </div>
+                    <div id="ScaleDiv" style="display: none;">
+                      <label for="scaleslider">Scale</label>
+                      <input id="scaleslider" type="range" min="0.1" max="1.0" value="1" step="0.10">
+                      <span id="scaleslideroutput">1.00 x</span>
+                    </div>
+                    <div id="SpeedDiv" style="display: inline-flex;">
+                      <label for="speedslider">Speed</label>
+                      <input id="speedslider" type="range" min="0" max="12" value="5" step="1">
+                      <span id="speedslideroutput">0.00 x</span>
+                    </div>
+                    <div id="ButtonsDiv">
+                      <button type="button" id="panleft" data-on-click="click_panleft" style="display: inline-flex;">&lt; Pan</button>
+                      <button type="button" id="zoomin" data-on-click="click_zoomin" style="display: inline-flex;">In +</button>
+                      <button type="button" id="zoomout" data-on-click="click_zoomout" style="display: inline-flex;">Out -</button>
+                      <button type="button" id="lasteight" data-on-click="click_lastEight">8 Hour</button>
+                      <button type="button" id="lasthour" data-on-click="click_lastHour">1 Hour</button>
+                      <button type="button" id="allof" data-on-click="click_all_events">All Events</button>
+                      <button type="button" id="liveButton">Live</button>
+                      <button type="button" id="fit">Scale</button>
+                      <button type="button" id="panright" data-on-click="click_panright" style="display: inline-flex;">Pan &gt;</button>
+                      <button type="button" id="downloadVideo" data-on-click="click_download" style="display: inline;">Download Video</button>
+                    </div>
+                    <div id="eventfilterdiv" class="input-group">
+                      <label>Archive Status 
+              <select name="archive_status" id="archive_status">
+            <option value="" selected="selected">All</option>
+            <option value="Archived">Archived</option>
+            <option value="Unarchived">UnArchived</option>
+            </select>          </label>
+                    </div>
+                    <div id="timelinediv">
+                      <canvas id="timeline" width="778" height="240"></canvas>
+                      <span id="scrubleft" style="position: absolute; bottom: 3px; left: 5px; display: inline-flex;">2022-01-14 14:13:10</span>
+                      <span id="scrubright" style="position: absolute; bottom: 3px; left: 619px; display: none;">2022-01-14 15:13:09</span>
+                      <span id="scruboutput" style="color: blue; position: absolute; bottom: 3px; left: 613px;">2022-01-14 15:13:14</span>
+                    </div>
+                  </div>
+
+
 
           <div class="row row-separator-big"></div>
           
@@ -86,18 +205,18 @@
           </div>
         </footer>
     
-    
         </div>
-
       </div>  
     </div>
     <!-- Dark soul -->
     <div id="darkLayer" class="darkBody"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <!--
-      <script src="assets/js/theme.js"></script>
-    -->
+    <!-- <script src="assets/js/theme.js"></script>     -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>     -->
+
+    <script src="assets/js/montage_review.js"></script>
     <script src="assets/js/indexwk.js"></script>
+    <script src="assets/js/csrf-magic.js"></script>    
   </body>
 </html>

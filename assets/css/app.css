@@ -44,7 +44,9 @@
 }
 
 .box .row {
+  /*
   border: 1px dotted gray;
+  */
 }
 
 .box .row.header {

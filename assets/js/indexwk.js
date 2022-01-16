@@ -72,6 +72,7 @@ function zm_upd_main(monitor, v_main) {
         return true;
     } else {
         current_monitor = monitor;
+        $('#v_main_x').src = '';
         $('#v_main_x').remove();
     }
     ready_events();
@@ -154,6 +155,8 @@ $(window).on('load', function() {
             ipc.send('login-out', 'LOGOUT');
         }
     },120000);
+
+    initPage();
 })
 
 // App button control
@@ -169,6 +172,7 @@ $('#btn-logoff').on('click', function() {
 })
 
 $('#btn-live').on('click', function() {
+    console.log('btn-live');
     if (current_monitor == 0) {
         return;
     }
