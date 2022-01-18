@@ -44,9 +44,7 @@
 }
 
 .box .row {
-  /*
-  border: 1px dotted gray;
-  */
+  /* border: 1px dotted gray; */
 }
 
 .box .row.header {
@@ -151,4 +149,9 @@
 .sub_video_img {
  width: auto; 
  max-height: 130px;
+}
+
+.myCanvas {
+  border: 1px solid black;
+  margin: 5px;
 }

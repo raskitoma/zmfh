@@ -21,6 +21,7 @@
     "mjpeg-camera": "^2.0.0",
     "mjpeg-proxy": "^0.3.0",
     "ps-tree": "^1.2.0",
-    "pstree": "^0.1.0"
+    "pstree": "^0.1.0",
+    "ws": "^8.4.2"
   }
 }

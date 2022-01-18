@@ -17,6 +17,9 @@ var resp_debug = null;
 var cached_events = null;
 var zm_live_mode = true;
 var cached_subs = [];
+var monitors = [];
+var numMonitors = 0;
+var events = [];
 var zm_img_src = '';
 var vsub_src = '';
 var liveMode=0;
@@ -30,8 +33,8 @@ let zm_bufm = '100';
 let zm_bufs = '10';
 let zm_fpsm = '30';
 let zm_fpss = '5';
-let zm_subreel_request = 1000/zm_fpss;
-let zm_mainreel_request = 1000/zm_fpsm;
+let zm_subreel_request = 1000;
+let zm_mainreel_request = 250;
 let zm_max_events = 6;
 let zm_event_duration = 10;
 
@@ -168,10 +171,10 @@ const get_events = async () => {
 }
 
 function zm_draw_events () {
-    if (current_monitor == 0) {
-        console.log('No monitor selected');
-        return;
-    }
+    // if (current_monitor == 0) {
+    //     console.log('No monitor selected');
+    //     return;
+    // }
     zm_event_obj = document.getElementById('zm_events');
     zm_event_obj.innerHTML = '';
     var dt = new Date();
@@ -202,10 +205,10 @@ function select_events () {
 }
 
 function launch_event(){
-    if(current_monitor==0) {
-        console.log('No monitor selected');
-        return;
-    }
+    // if(current_monitor==0) {
+    //     console.log('No monitor selected');
+    //     return;
+    // }
     select_events();
     get_events();
     zm_Record();
@@ -219,4 +222,4 @@ function ready_events() {
     zm_select_enable();
 }
 
-// Tratando de matar esta verga
+

@@ -15,13 +15,13 @@ function zm_draw_group_list(my_group, html_obj) {
         document.getElementById(html_obj).innerHTML += zm_group_html;
     }
     return true;
-}
+} // end zm_draw_group_list
 
 function zm_get_monitors_from_group(my_group, group_name) {
     return my_group[group_name].monitors;
-}
+} // end zm_get_monitors_from_group
 
-function zm_open_group(my_group, group_name, v_main, v_sub) {
+function zm_open_group(my_group, group_name) {
     if (current_group == group_name) {
         zm_live_mode = true;
         return
@@ -34,16 +34,17 @@ function zm_open_group(my_group, group_name, v_main, v_sub) {
             $(sub_obj).remove();
         }
     )
-    monitors = zm_get_monitors_from_group(my_group, group_name);
-    var video_sub = document.getElementById(v_sub);
+    var monitors = zm_get_monitors_from_group(my_group, group_name);
+    var video_sub = document.getElementById('monitors');
     video_sub.innerHTML = '';
-    var first_monitor = monitors[0];
+    var current_monitor = monitors[0];
     cached_subs = [];
     for (var monitor in monitors) {
         zm_connkey = Math.floor(100000 + Math.random() * 900000)
         zm_rand = Math.floor(10000 + Math.random() * 90000)
         monitor_id = monitors[monitor];
-        vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ',\''+ v_main + '\')" href="#" id="vsub_' + monitor_id + '"></a>';
+        vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ')" href="#" id="vsub_' + monitor_id + '"></a>';
+        //vsub_href = '<canvas class="myCanvas" title="Monitor '+ monitor_id +'" id="Monitor' + monitor_id + '" monitor_id="' + monitor_id + '">No Canvas Support!</canvas>';
         video_sub.innerHTML += vsub_href;
         var vsub_obj = document.getElementById('vsub_' + monitor_id);
         sub_img = new Image(); 
@@ -53,29 +54,24 @@ function zm_open_group(my_group, group_name, v_main, v_sub) {
         sub_img.setAttribute('class', vsub_class);
         sub_img.setAttribute('src', vsub_src);
         sub_img.setAttribute('id', 'vv_' + monitor_id);
-        sub_img.setAttribute('on_load', function(){
-            setTimeout(function(){
-                document.getElementById('vv_' + monitor_id).src = vsub_src;
-            }, zm_subreel_request);
-        });
         vsub_obj.appendChild(sub_img);
         cached_subs.push('vsub_' + monitor_id);
     }
-    zm_upd_main(first_monitor, v_main);
+    zm_upd_main(current_monitor);
+    reload_img();
     return true;
-}
+} // end zm_open_group
 
-function zm_upd_main(monitor, v_main) {
-    var video_main = document.getElementById(v_main);
-    if (current_monitor == monitor) {
-        ready_events();
-        return true;
+function zm_upd_main(monitor) {
+    var video_main = document.getElementById('v_main');	
+    if (monitor == current_monitor) {
+        console.log('same monitor');
+        return;
     } else {
+        ready_events();
+        video_main.innerHTML = '';
         current_monitor = monitor;
-        $('#v_main_x').src = '';
-        $('#v_main_x').remove();
     }
-    ready_events();
     if (zm_live_mode) {
         zm_Live();
     } else {        
@@ -85,13 +81,35 @@ function zm_upd_main(monitor, v_main) {
     var zm_connkey = Math.floor(100000 + Math.random() * 900000)
     var zm_main_img = new Image();
     zm_main_img.setAttribute('class', 'video-main no-drag' ); // app-draggable');
+    // var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=single&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     zm_main_img.src = zm_img_src;
     zm_main_img.setAttribute('id', 'v_main_x');
     video_main.appendChild(zm_main_img);
-    //refresh_main();
+    // reload_main();
+    return true;
+} // end zm_upd_main
+
+function reload_img() {
+    for (var monitor in monitorPtr) {
+        my_obj = document.getElementById('vv_' + monitorPt[monitor]);
+        zm_rand = new Date().getTime();
+        my_obj.src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitorPt[monitor] + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
+    }
+    setTimeout("reload_img()", zm_subreel_request);
     return true;
 }
+
+
+function reload_main() {
+    my_obj = document.getElementById('v_main_x');
+    zm_rand = new Date().getTime();
+    my_obj.src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=single&maxfps=" + zm_fpsm + "&monitor=" + current_monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "#" + zm_rand;   
+    console.log(my_obj.src);
+    setTimeout("reload_main()", zm_mainreel_request);
+    return true;
+} // end reload_main
+
 
 function zm_main_playback() {  
     $('#v_main_x').remove();
@@ -137,7 +155,7 @@ $(window).on('load', function() {
     setTimeout(function(){
         // draw the group list
             zm_draw_group_list(zm_groups, "zm_groups");
-            zm_draw_events();
+            ready_events();
             if (check_session()) {
                 dimOff();
             } else {
@@ -156,7 +174,6 @@ $(window).on('load', function() {
         }
     },120000);
 
-    initPage();
 })
 
 // App button control
