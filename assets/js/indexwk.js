@@ -9,9 +9,8 @@ function check_obj(obj){
 
 function zm_draw_group_list(my_group, html_obj) {
     for (var key_group in my_group) {
-        zm_group_html = '<button class="btn btn-outline-dark no-drag" onclick="zm_open_group(zm_groups, \'' + key_group + '\',\'v_main\',\'v_sub\');"><i class="fa fa-circle"></i> ' + my_group[key_group].name + '</button><br>';
+        var zm_group_html = '<button class="btn btn-outline-dark no-drag" onclick="zm_open_group(zm_groups, \'' + key_group + '\',\'v_main\',\'v_sub\');"><i class="fa fa-circle"></i> ' + my_group[key_group].name + '</button><br>';
         zm_group_html += '<br />'; 
-        zm_output_obj = html_obj;
         document.getElementById(html_obj).innerHTML += zm_group_html;
     }
     return true;
@@ -26,7 +25,7 @@ function zm_open_group(my_group, group_name) {
         zm_live_mode = true;
         return
     } else {
-        current_group = group_name;
+        var current_group = group_name;
     }
 
     cached_subs.forEach(
@@ -39,17 +38,17 @@ function zm_open_group(my_group, group_name) {
     video_sub.innerHTML = '';
     window.stop(); // to kill any mjpeg actually running before starting a new one
     var current_monitor = monitors[0];
-    cached_subs = [];
+    var cached_subs = [];
     for (var monitor in monitors) {
-        zm_connkey = Math.floor(100000 + Math.random() * 900000)
-        zm_rand = Math.floor(10000 + Math.random() * 90000)
-        monitor_id = monitors[monitor];
-        vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ')" href="#" id="vsub_' + monitor_id + '"></a>';
+        var zm_connkey = Math.floor(100000 + Math.random() * 900000)
+        var zm_rand = Math.floor(10000 + Math.random() * 90000)
+        var monitor_id = monitors[monitor];
+        var vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ')" href="#" id="vsub_' + monitor_id + '"></a>';
         video_sub.innerHTML += vsub_href;
         var vsub_obj = document.getElementById('vsub_' + monitor_id);
-        sub_img = new Image(); 
-        vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitor_id + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
-        vsub_class = 'video-sub no-drag shadow';
+        var sub_img = new Image(); 
+        var vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitor_id + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
+        var vsub_class = 'video-sub no-drag shadow';
         sub_img.setAttribute('class', vsub_class);
         sub_img.setAttribute('src', vsub_src);
         sub_img.setAttribute('id', 'vv_' + monitor_id);
@@ -69,7 +68,7 @@ function zm_upd_main(monitor) {
     } else {
         ready_events();
         video_main.innerHTML = '';
-        current_monitor = monitor;
+        var current_monitor = monitor;
     }
     if (zm_live_mode) {
         zm_Live();
@@ -78,11 +77,11 @@ function zm_upd_main(monitor) {
         return true;
     }
 
+    var zm_connkey = Math.floor(100000 + Math.random() * 900000)
     var zm_main_src_mjpeg = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     window.stop(); // to kill any mjpeg actually running before starting a new one
-    var zm_connkey = Math.floor(100000 + Math.random() * 900000)
     var zm_main_img = new Image();
-    zm_main_img.setAttribute('class', 'video-main no-drag' ); // app-draggable');
+    zm_main_img.setAttribute('class', 'video-main no-drag' );
     zm_main_img.src = zm_main_src_mjpeg;
     zm_main_img.setAttribute('id', 'v_main_x');
     video_main.appendChild(zm_main_img);
@@ -91,7 +90,7 @@ function zm_upd_main(monitor) {
 
 function reload_img() {
     for (var monitor in monitors) {
-        my_obj = document.getElementById('vv_' + monitorPt[monitor]);
+        var my_obj = document.getElementById('vv_' + monitorPt[monitor]);
         zm_rand = new Date().getTime();
         my_obj.src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitorPt[monitor] + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
     }
@@ -105,9 +104,7 @@ function zm_main_playback() {
     window.stop(); // to kill any mjpeg actually running before starting a new one
     var video_obj = document.getElementById('v_main_vid');
     var source = document.createElement('source');
-    var zm_connkey = Math.floor(100000 + Math.random() * 900000)
-    var zm_rand = Math.floor(10000 + Math.random() * 90000)
-    video_src = zm_url_base + "/index.php?eid=" + current_event + "&view=view_video&token=" + zm_token;
+    var video_src = zm_url_base + "/index.php?eid=" + current_event + "&view=view_video&token=" + zm_token;
     source.setAttribute('src', video_src);
     source.setAttribute('type', 'video/mp4');
     source.setAttribute('id', 'v_main_vid_x');

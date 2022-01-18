@@ -4,7 +4,7 @@ const store = new Store();
 let $ = require('jquery');
 
 // Control variables
-zm_groups = store.get('zm_groups');
+var zm_groups = store.get('zm_groups');
 var session_live = false;
 var zm_token = '';
 var zm_auth = '';
@@ -25,8 +25,8 @@ var vsub_src = '';
 var liveMode=0;
 
 // This setttings must be changed accordingly to the devices and moved to json file
-let main_width = 800 // $(window).width();
-let main_height = 600 // $(window).height();
+let main_width = 800;
+let main_height = 600;
 let sub_width = 400;
 let sub_height = 300;
 let zm_bufm = '100';
@@ -82,18 +82,16 @@ function zm_select_disable() {
 if (store.get('zmServer') != null) {
     $('#zmServer').val(store.get('zmServer'))
     var zm_parsed = require('url').parse(store.get('zmServer'))
-    zm_protocol = zm_parsed.protocol
-    zm_host = zm_parsed.hostname
-    zm_port = zm_parsed.port
-    zm_path = zm_parsed.path
+    var zm_protocol = zm_parsed.protocol
+    var zm_host = zm_parsed.hostname
+    var zm_port = zm_parsed.port
+    var zm_path = zm_parsed.path
 }
 
 var zm_url_base = '' 
 
 if (store.get('zmToken') != null) {
-    var zm_auth = store.get('zmAuth');
-    var zm_token = store.get('zmToken');
-    var zm_usr = store.get('zmUsr');
+    zm_token = store.get('zmToken');
 }
 
 if (zm_token) {
@@ -108,12 +106,12 @@ if (zm_token) {
 
     zm_url_base = options.protocol + '//'  + options.host + ':' + options.port + options.path
     
-    headers = {
+    var headers = {
         'Authorization': 'Basic ' + store.get('zmToken'),
         'Content-Type': 'application/json'
     }
 
-    zm_url = zm_url_base + '/api/groups.json?token=' + store.get('zmToken')
+    var zm_url = zm_url_base + '/api/groups.json?token=' + store.get('zmToken')
 }
 
 // Checking session status    
@@ -127,7 +125,6 @@ const check_session = async () => {
             session_live = false;
             return false;
         }
-        return false;
     } catch (err) {
         // Handle Error Here
         console.error(err);
@@ -140,7 +137,7 @@ const get_events = async () => {
     var zm_rand = Math.floor(10000 + Math.random() * 90000)
     zm_StartTime = 'StartTime%20>=:' + zm_StartTime;
     zm_EndTime = 'EndTime%20<=:' + zm_EndTime;
-    zm_events_url = zm_url_base + '/api/events/index/MonitorId:' + current_monitor + '/' + zm_StartTime + '/' + zm_EndTime + '.json?token=' + store.get('zmToken') + '&rand=' + zm_rand +  '&sort=StartTime&direction=desc&limit=10';
+    var zm_events_url = zm_url_base + '/api/events/index/MonitorId:' + current_monitor + '/' + zm_StartTime + '/' + zm_EndTime + '.json?token=' + store.get('zmToken') + '&rand=' + zm_rand +  '&sort=StartTime&direction=desc&limit=10';
     console.log('Sending request to: ' + zm_events_url);
     try {
         console.log('Launching...');
@@ -151,7 +148,7 @@ const get_events = async () => {
             console.log('Response: ' + response.status);
             console.log(response.data);
             cached_events = response.data.events;
-            events_qty = response.data.events.length;
+            var events_qty = response.data.events.length;
             if (events_qty == 0) {
                 console.log('No events found');
                 zm_Live();
@@ -159,7 +156,7 @@ const get_events = async () => {
                 return false;
             }
             console.log(cached_events);
-            oldest_event = cached_events.length - 1;
+            var oldest_event = cached_events.length - 1;
             current_event = cached_events[oldest_event].Event.Id;
             return true;
         }
@@ -171,16 +168,12 @@ const get_events = async () => {
 }
 
 function zm_draw_events () {
-    // if (current_monitor == 0) {
-    //     console.log('No monitor selected');
-    //     return;
-    // }
-    zm_event_obj = document.getElementById('zm_events');
+    var zm_event_obj = document.getElementById('zm_events');
     zm_event_obj.innerHTML = '';
     var dt = new Date();
-    current_near_minutes = leftPad((((dt.getMinutes() + 7.5)/zm_event_duration | 0) * zm_event_duration) % 60,2);
+    var current_near_minutes = leftPad((((dt.getMinutes() + 7.5)/zm_event_duration | 0) * zm_event_duration) % 60,2);
     for (var i = 0; i <= zm_max_events; i++) {
-        normalized_date = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), current_near_minutes, 0, 0);
+        var normalized_date = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), current_near_minutes, 0, 0);
         normalized_date = new Date(normalized_date - (i * zm_event_duration * 60 * 1000));
         var date_pt01 = normalized_date.getFullYear() + '-' + leftPad(normalized_date.getMonth() + 1,2) + '-' + leftPad(normalized_date.getDate(),2)
         var date_pt02 = leftPad(normalized_date.getHours(),2) + ':' + leftPad(normalized_date.getMinutes(),2) + ':00';
@@ -197,7 +190,7 @@ function zm_draw_events () {
 
 function select_events () {
     zm_EndTime = $('#zm_events').val();
-    endtime = new Date($('#zm_events').val().replace("%20", " "));
+    var endtime = new Date($('#zm_events').val().replace("%20", " "));
     endtime = new Date(endtime - (zm_event_duration * 60 * 1000));
     var date_pt01 = endtime.getFullYear() + '-' + leftPad(endtime.getMonth() + 1,2) + '-' + leftPad(endtime.getDate(),2)
     var date_pt02 = leftPad(endtime.getHours(),2) + ':' + leftPad(endtime.getMinutes(),2) + ':00';
@@ -205,10 +198,6 @@ function select_events () {
 }
 
 function launch_event(){
-    // if(current_monitor==0) {
-    //     console.log('No monitor selected');
-    //     return;
-    // }
     select_events();
     get_events();
     zm_Record();
