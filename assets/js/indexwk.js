@@ -171,7 +171,7 @@ $('#btn-live').on('click', function() {
 $('#btn-record').on('click', function() {
     zm_live_mode = true;
     zm_Live();
-    zm_upd_main(current_monitor, 'v_main');
+    zm_upd_main(current_monitor);
 })
 
 $('#zm_events').on('change', function() {
