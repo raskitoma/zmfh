@@ -16,16 +16,16 @@
 
   <body id="page-top app-draggable">
     <!-- window title/control buttons -->
-    <nav class="navbar navbar-light navbar-expand shadow bg-white mb-1 topbar fixed-top titlebar app-draggable">
+    <nav aria-label="App Window Control" class="navbar navbar-light navbar-expand shadow bg-white mb-1 topbar fixed-top titlebar app-draggable">
       <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0 titlebar app-draggable" href="#" style="height: 40px;">
-        <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-robot mainspacer"></i></div>
+        <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-robot mainspacer" /></div>
         <div class="sidebar-brand-text mx-3"><span>ZMFH</span></div>
       </a>            
       <div class="container-fluid">        
         <p style="width: 100%;height: 40px;padding: 15px;">Welcome <script>document.write(store.get('zmUsr'))</script></p>
-        <button class="btn btn-primary py-0 btn-warning no-drag" id="btn-logoff" type="button"><i class="fas fa-user-times"></i></button>
+        <button class="btn btn-primary py-0 btn-warning no-drag" id="btn-logoff" type="button"><i class="fas fa-user-times" /></button>
         <div class="d-none d-sm-block topbar-divider"></div>
-        <button class="btn btn-primary py-0 btn-danger no-drag" id="btn-exit" type="button"><i class="fas fa-times"></i></button>
+        <button class="btn btn-primary py-0 btn-danger no-drag" id="btn-exit" type="button"><i class="fas fa-times" /></button>
       </div>
     </nav>
  
@@ -34,20 +34,20 @@
       <div class="row">
 
         <!-- Options menu -->
-        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 app-draggable">
+        <nav aria-label="App Menu" class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 app-draggable">
           <div class="container-fluid d-flex flex-column p-0">
             <div class="row row-separator-big"></div>
             <div class="card shadow mb-3">
               <button class="btn btn-success no-drag" id="btn-live" type="button">Live</button>
               <button class="btn btn-danger no-drag" id="btn-record" type="button">Rec</button>
             </div>
-            <div class="text-white opttitle"><i class="fa fa-clock objspacer"></i><span> Events</span></div> 
+            <div class="text-white opttitle"><i class="fa fa-clock objspacer" /><span> Events</span></div> 
             <div class="card shadow mb-3">
               <div class="card-body zm_events">
                 <select id="zm_events" class="form-control no-drag" ></select>
               </div>
             </div>
-            <div class="text-white opttitle"><i class="fa fa-video-camera objspacer"></i><span> Groups</span></div> 
+            <div class="text-white opttitle"><i class="fa fa-video-camera objspacer" /><span> Groups</span></div> 
             <div class="card shadow mb-3">
               <div class="card-body zm_groups" id="zm_groups"></div>
             </div>
