@@ -134,7 +134,7 @@ const check_session = async () => {
 
 const get_events = async () => {
     console.log('Getting events');
-    var zm_rand = Math.floor(10000 + Math.random() * 90000)
+    var zm_rand = new Date().getTime();
     zm_StartTime = 'StartTime%20>=:' + zm_StartTime;
     zm_EndTime = 'EndTime%20<=:' + zm_EndTime;
     var zm_events_url = zm_url_base + '/api/events/index/MonitorId:' + current_monitor + '/' + zm_StartTime + '/' + zm_EndTime + '.json?token=' + store.get('zmToken') + '&rand=' + zm_rand +  '&sort=StartTime&direction=desc&limit=10';

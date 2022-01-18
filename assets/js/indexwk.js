@@ -40,8 +40,8 @@ function zm_open_group(my_group, group_name) {
     var current_monitor = monitors[0];
     var cached_subs = [];
     for (var monitor in monitors) {
-        var zm_connkey = Math.floor(100000 + Math.random() * 900000)
-        var zm_rand = Math.floor(10000 + Math.random() * 90000)
+        var zm_connkey = new Date().getTime();
+        var zm_rand = new Date().getTime();
         var monitor_id = monitors[monitor];
         var vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ')" href="#" id="vsub_' + monitor_id + '"></a>';
         video_sub.innerHTML += vsub_href;
@@ -77,7 +77,7 @@ function zm_upd_main(monitor) {
         return true;
     }
 
-    var zm_connkey = Math.floor(100000 + Math.random() * 900000)
+    var zm_connkey = new Date().getTime();
     var zm_main_src_mjpeg = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     window.stop(); // to kill any mjpeg actually running before starting a new one
     var zm_main_img = new Image();
