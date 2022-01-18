@@ -37,6 +37,7 @@ function zm_open_group(my_group, group_name) {
     var monitors = zm_get_monitors_from_group(my_group, group_name);
     var video_sub = document.getElementById('monitors');
     video_sub.innerHTML = '';
+    window.stop(); // to kill any mjpeg actually running before starting a new one
     var current_monitor = monitors[0];
     cached_subs = [];
     for (var monitor in monitors) {
@@ -44,12 +45,10 @@ function zm_open_group(my_group, group_name) {
         zm_rand = Math.floor(10000 + Math.random() * 90000)
         monitor_id = monitors[monitor];
         vsub_href = '<a onclick="zm_upd_main(' + monitor_id + ')" href="#" id="vsub_' + monitor_id + '"></a>';
-        //vsub_href = '<canvas class="myCanvas" title="Monitor '+ monitor_id +'" id="Monitor' + monitor_id + '" monitor_id="' + monitor_id + '">No Canvas Support!</canvas>';
         video_sub.innerHTML += vsub_href;
         var vsub_obj = document.getElementById('vsub_' + monitor_id);
         sub_img = new Image(); 
         vsub_src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitor_id + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
-        console.log(vsub_src);
         vsub_class = 'video-sub no-drag shadow';
         sub_img.setAttribute('class', vsub_class);
         sub_img.setAttribute('src', vsub_src);
@@ -78,20 +77,20 @@ function zm_upd_main(monitor) {
         launch_event();
         return true;
     }
+
+    var zm_main_src_mjpeg = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
+    window.stop(); // to kill any mjpeg actually running before starting a new one
     var zm_connkey = Math.floor(100000 + Math.random() * 900000)
     var zm_main_img = new Image();
     zm_main_img.setAttribute('class', 'video-main no-drag' ); // app-draggable');
-    // var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=single&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
-    var zm_img_src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
-    zm_main_img.src = zm_img_src;
+    zm_main_img.src = zm_main_src_mjpeg;
     zm_main_img.setAttribute('id', 'v_main_x');
     video_main.appendChild(zm_main_img);
-    // reload_main();
     return true;
 } // end zm_upd_main
 
 function reload_img() {
-    for (var monitor in monitorPtr) {
+    for (var monitor in monitors) {
         my_obj = document.getElementById('vv_' + monitorPt[monitor]);
         zm_rand = new Date().getTime();
         my_obj.src = zm_url_base + "/cgi-bin/nph-zms?scale=50&mode=single&maxfps=" + zm_fpss + "&monitor=" + monitorPt[monitor] + "&token=" + zm_token + "&connkey=" + zm_connkey + "&rand=" + zm_rand;
@@ -100,20 +99,10 @@ function reload_img() {
     return true;
 }
 
-
-function reload_main() {
-    my_obj = document.getElementById('v_main_x');
-    zm_rand = new Date().getTime();
-    my_obj.src = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=single&maxfps=" + zm_fpsm + "&monitor=" + current_monitor + "&token=" + zm_token + "&connkey=" + zm_connkey + "#" + zm_rand;   
-    console.log(my_obj.src);
-    setTimeout("reload_main()", zm_mainreel_request);
-    return true;
-} // end reload_main
-
-
 function zm_main_playback() {  
     $('#v_main_x').remove();
     $('#v_main_vid_x').remove();
+    window.stop(); // to kill any mjpeg actually running before starting a new one
     var video_obj = document.getElementById('v_main_vid');
     var source = document.createElement('source');
     var zm_connkey = Math.floor(100000 + Math.random() * 900000)
@@ -128,23 +117,6 @@ function zm_main_playback() {
         src: source.getAttribute('src'),
         type: source.getAttribute('type'),
     });    
-    return true;
-}
-
-function refresh_main () {
-    console.log('refresh_main');
-    var obj = document.getElementById('v_main_x');
-    if (!obj) {
-        setTimeout( refresh_main(), zm_mainreel_request );
-        return true;
-    }
-    if (!obj.complete){
-        console.log('refresh_main: not completed');
-        setTimeout( refresh_main(), zm_mainreel_request );
-        return true;
-    }
-    var zm_rand = Math.floor(10000 + Math.random() * 90000)
-    obj.src = zm_img_src + '#rand=' + zm_rand;
     return true;
 }
 
