@@ -1,15 +1,13 @@
-const ipc = require('electron').ipcRenderer;
+const { systemPreferences } = require('electron');
 
 function check_obj(obj){
-    if (obj == null) {
-        return false;
-    }
+    if (obj == null){ return false; }
     return true;
 }
 
 function zm_draw_group_list(my_group, html_obj) {
     for (var key_group in my_group) {
-        var zm_group_html = '<button class="btn btn-outline-dark no-drag" onclick="zm_open_group(zm_groups, \'' + key_group + '\',\'v_main\',\'v_sub\');"><i class="fa fa-circle"></i> ' + my_group[key_group].name + '</button><br>';
+        var zm_group_html = '<button class="btn btn-light no-drag" onclick="zm_open_group(zm_groups, \'' + key_group + '\',\'v_main\',\'v_sub\');"><i class="fa fa-circle"></i> ' + my_group[key_group].name + '</button><br>';
         zm_group_html += '<br />'; 
         document.getElementById(html_obj).innerHTML += zm_group_html;
     }
@@ -28,11 +26,13 @@ function zm_open_group(my_group, group_name) {
         var current_group = group_name;
     }
 
-    cached_subs.forEach(
-        function(sub_obj) {
-            $(sub_obj).remove();
-        }
-    )
+    if (cached_subs) {
+        cached_subs.forEach(
+            function(sub_obj) {
+                $(sub_obj).remove();
+            }
+        )
+    }
     var monitors = zm_get_monitors_from_group(my_group, group_name);
     var video_sub = document.getElementById('monitors');
     video_sub.innerHTML = '';
@@ -81,7 +81,7 @@ function zm_upd_main(monitor) {
     var zm_main_src_mjpeg = zm_url_base + "/cgi-bin/nph-zms?scale=100&width=" + main_width + "px&height=" + main_height + "px&mode=jpeg&maxfps=" + zm_fpsm + "&monitor=" + monitor + "&token=" + zm_token + "&connkey=" + zm_connkey;
     window.stop(); // to kill any mjpeg actually running before starting a new one
     var zm_main_img = new Image();
-    zm_main_img.setAttribute('class', 'video-main no-drag' );
+    zm_main_img.setAttribute('class', 'video-main no-drag img-fluid' );
     zm_main_img.src = zm_main_src_mjpeg;
     zm_main_img.setAttribute('id', 'v_main_x');
     video_main.appendChild(zm_main_img);
@@ -129,7 +129,7 @@ $(window).on('load', function() {
                 dimOff();
             } else {
                 dimOn();
-                ipc.send('login-out', 'LOGOUT');
+                // ipc.send('login-out', 'LOGOUT');
             }
     },1500);
     setInterval(function(){
@@ -139,22 +139,16 @@ $(window).on('load', function() {
             dimOff();
         } else {
             dimOn();
-            ipc.send('login-out', 'LOGOUT');
         }
     },120000);
 
 })
 
-// App button control
-$('#btn-exit').on('click', function() {
-    dimOn();
-    ipc.send('exit-app', 'GOODBYE');
-})
-
 $('#btn-logoff').on('click', function() {
     dimOn();
     store.delete('zmToken');
-    ipc.send('login-out', 'LOGOUT');
+    // refresh window 
+    ipc.send('refresh-window', 'REFRESH')
 })
 
 $('#btn-live').on('click', function() {
@@ -174,3 +168,174 @@ $('#btn-record').on('click', function() {
 $('#zm_events').on('change', function() {
     launch_event();
 })
+
+$('#btn-qrback').on('click', function() {
+    // hide modal myqrscan
+    var qrmodal = document.getElementById('myqrscan');
+    qrmodal.style.display= 'none';
+    qrstream.getTracks()[0].stop();
+})
+
+
+var qrvideo = document.createElement("video");
+var canvasElement = document.getElementById("qrcanvas");
+var canvas = canvasElement.getContext("2d");
+var loadingMessage = document.getElementById("loadingMessage");
+var outputContainer = document.getElementById("output");
+var outputMessage = document.getElementById("outputMessage");
+var outputData = document.getElementById("outputData");
+var qrstream;
+
+function drawLine(begin, end, color) {
+  canvas.beginPath();
+  canvas.moveTo(begin.x, begin.y);
+  canvas.lineTo(end.x, end.y);
+  canvas.lineWidth = 4;
+  canvas.strokeStyle = color;
+  canvas.stroke();
+}
+
+function tick() {
+  loadingMessage.innerText = "⌛ Loading video..."
+  if (qrvideo.readyState === qrvideo.HAVE_ENOUGH_DATA) {
+    loadingMessage.hidden = true;
+    canvasElement.hidden = false;
+    outputContainer.hidden = false;
+
+    // canvasElement.height = qrvideo.videoHeight;
+    // canvasElement.width = qrvideo.videoWidth;
+    canvasElement.height = 240;
+    canvasElement.width = 320;
+    canvas.drawImage(qrvideo, 0, 0, canvasElement.width, canvasElement.height);
+    var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+    var code = jsQR(imageData.data, imageData.width, imageData.height, {
+      inversionAttempts: "dontInvert",
+    });
+    if (code) {
+      drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+      drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+      drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+      drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+      outputMessage.hidden = true;
+      outputData.parentElement.hidden = false;
+      outputData.innerText = code.data;
+      // Check if code.data is a valid json
+        try {
+            var json = JSON.parse(code.data);
+            if (json.usr) {
+                console.log(json);
+                login_qr(json);
+                // hide modal myqrscan
+                var qrmodal = document.getElementById('myqrscan');
+                qrmodal.style.display= 'none';
+                qrstream.getTracks()[0].stop();
+                return true;
+            }
+        } catch (e) {
+            console.log(e, 'not a valid json');
+        }
+    } else {
+      outputMessage.hidden = false;
+      outputData.parentElement.hidden = true;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+$('#btn-qrcode').on('click', function() {
+    // show modal myqrscan
+    var qrmodal = document.getElementById('myqrscan');
+    qrmodal.style.display= 'block';
+
+    // electronjs request access to camera
+    navigator.mediaDevices.getUserMedia({video: true})
+    .then(function(stream) {
+            qrstream = stream;
+            qrvideo.srcObject = stream;
+            qrvideo.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+            qrvideo.play();
+            requestAnimationFrame(tick);
+        }).catch(function(err) {
+            console.log('Access denied');
+        });
+                    
+    return true;
+})
+
+ 
+function login_qr(my_json) {
+    console.log('Logging in')
+    
+    let txtUser=my_json.usr;
+    let txtPwd=my_json.pwd;
+    let txtZmServer=my_json.srv;
+
+    console.log('QR --> User: ' + txtUser, 'Pwd: ' + txtPwd, 'ZmServer: ' + txtZmServer);
+
+    var zm_parsed = require('url').parse(txtZmServer);
+    zm_protocol = zm_parsed.protocol
+    zm_host = zm_parsed.hostname
+    zm_port = (zm_parsed.port) ? zm_parsed.port : 80;
+    zm_path = zm_parsed.path
+    
+    console.log('ZmProtocol: ' + zm_protocol, 'ZmHost: ' + zm_host, 'ZmPort: ' + zm_port, 'ZmPath: ' + zm_path);
+
+    let options = {
+        method: 'POST',
+        protocol: zm_protocol,
+        host: zm_host,
+        port: zm_port,
+        path: zm_path + '/api/host',
+    }
+
+
+    let params = new URLSearchParams();
+    params.append('user', txtUser);
+    params.append('pass', txtPwd);
+    params.append('stateful', 1);
+
+    let headers = {
+        'Content-Type': 'application/json',
+        'Content-Length': params.length
+    }
+
+    zm_url = options.protocol + '//' + options.host + ':' + options.port + options.path + '/login.json'
+
+    console.log('QR Login:', zm_url);
+
+    $('#zmmsg').text('Logging in...')
+    $('#zmmsg').html('<img src="assets/img/loading.gif" width="15" height="15" />')
+    
+    axios.post(zm_url, params, headers)
+    .then(function (response) {
+        console.log(response)
+        if (response.statusText == 'OK') {
+            console.log('login success')
+            store.set('zmServer', $('#zmServer').val())
+            store.set('zmToken', response.data.access_token)
+            store.set('zmAuth', response.data.credentials)
+            store.set('zmUsr', txtUser)
+            store.set('zmPwd', txtPwd)
+            // hide login modal
+            obj_login.style.display = 'none';
+            zm_auth = response.data.credentials;
+            zm_token = response.data.access_token;
+            console.log(zm_auth, '-----------------', zm_token);
+            // hide modal obj_login
+            console.log('Session is valid');
+            obj_login.style.display = "none";
+            // refresh window 
+            ipc.send('refresh-window', 'REFRESH')
+            // launch_event();
+            return true;
+        } else {
+            $('#zmmsg').text('Login failed')
+            return false;
+        }
+    })
+    .catch(function (error) {
+        $('#zmmsg').text('Invalid QR Data: ' + error)
+        return false;
+    })
+
+}

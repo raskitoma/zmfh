@@ -1,17 +1,15 @@
-let $ = require('jquery');
-const ipc = require('electron').ipcRenderer;
-const Store = require('electron-store');
-const store = new Store();
-const axios = require('axios');
+const { ipcMain } = require('electron');
 
 if (store.get('zmServer') != null) {
     $('#zmServer').val(store.get('zmServer'))
     var zm_parsed = require('url').parse(store.get('zmServer'))
     zm_protocol = zm_parsed.protocol
     zm_host = zm_parsed.hostname
-    zm_port = zm_parsed.port
+    zm_port = (zm_parsed.port)?zm_parsed.port:80;
     zm_path = zm_parsed.path
 }
+
+obj_login = document.getElementById('login-entry');
 
 if (store.get('zmToken') != null) {
     // Token exists, confirm it and login
@@ -35,14 +33,20 @@ if (store.get('zmToken') != null) {
         console.log(response.data)
         if (response.statusText == 'OK') {
             console.log('Token is valid, logging in')
-            ipc.send('login-success', response.statusText)
+             // hide modal obj_login
+             obj_login.style.display = "none";
         } else {
             console.log('Token is invalid, logging out')
             store.delete('zmToken')
-            ipc.send('login-out', 'LOGOUT')
+             // hide modal obj_login
+             obj_login.style.display = "block";
         }
     })
 
+} else {
+    // No token, shows obj_login modal for login
+    console.log('No token, showing login modal')
+    obj_login.style.display = 'block';
 }
 
 $('#btn-cancel').on('click', () => {
@@ -50,15 +54,18 @@ $('#btn-cancel').on('click', () => {
 })
 
 $('#btn-login').on('click', () => {
-    
+    console.log('Logging in')
+   
     let txtUser=$('#txtUsr').val();
     let txtPwd=$('#txtPwd').val();
     let txtZmServer=$('#zmServer').val();
 
+    console.log('User: ' + txtUser, 'Pwd: ' + txtPwd, 'ZmServer: ' + txtZmServer);
+
     var zm_parsed = require('url').parse(txtZmServer);
     zm_protocol = zm_parsed.protocol
     zm_host = zm_parsed.hostname
-    zm_port = zm_parsed.port
+    zm_port = (zm_parsed.port) ? zm_parsed.port : 80;
     zm_path = zm_parsed.path
     
     let options = {
@@ -68,6 +75,7 @@ $('#btn-login').on('click', () => {
         port: zm_port,
         path: zm_path + '/api/host',
     }
+
 
     let params = new URLSearchParams();
     params.append('user', txtUser);
@@ -80,6 +88,8 @@ $('#btn-login').on('click', () => {
     }
 
     zm_url = options.protocol + '//' + options.host + ':' + options.port + options.path + '/login.json'
+
+    console.log(zm_url);
 
     $('#zmmsg').text('Logging in...')
     $('#zmmsg').html('<img src="assets/img/loading.gif" width="15" height="15" />')
@@ -94,7 +104,14 @@ $('#btn-login').on('click', () => {
             store.set('zmAuth', response.data.credentials)
             store.set('zmUsr', txtUser)
             store.set('zmPwd', txtPwd)
-            ipc.send('login-success', response.statusText)
+            // hide login modal
+            obj_login.style.display = 'none';
+            zm_auth = response.data.credentials;
+            zm_token = response.data.access_token;
+            console.log(zm_auth, '-----------------', zm_token);
+            // refresh window 
+            ipc.send('refresh-window', 'REFRESH')
+            // launch_event();
             return true;
         } else {
             $('#zmmsg').text('Login failed')

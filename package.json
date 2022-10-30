@@ -18,6 +18,7 @@
     "electron-window-state": "^5.0.3",
     "express": "^4.17.2",
     "jquery": "^3.6.0",
+    "jsqr": "^1.4.0",
     "mjpeg-camera": "^2.0.0",
     "mjpeg-proxy": "^0.3.0",
     "ps-tree": "^1.2.0",

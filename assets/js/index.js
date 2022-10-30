@@ -1,7 +1,11 @@
 const axios = require('axios');
 const Store = require('electron-store');
+const ipc = require('electron').ipcRenderer;
 const store = new Store();
 let $ = require('jquery');
+const { app } = require('electron');
+var obj_login = null;
+const jsQR = require('jsqr');
 
 // Control variables
 var zm_groups = store.get('zm_groups');
@@ -84,16 +88,18 @@ if (store.get('zmServer') != null) {
     var zm_parsed = require('url').parse(store.get('zmServer'))
     var zm_protocol = zm_parsed.protocol
     var zm_host = zm_parsed.hostname
-    var zm_port = zm_parsed.port
+    var zm_port = (zm_parsed.port)?zm_parsed.port:80
     var zm_path = zm_parsed.path
 }
 
 var zm_url_base = '' 
 
+console.log('Launching...');
 if (store.get('zmToken') != null) {
     zm_token = store.get('zmToken');
 }
 
+console.log('token exists confirm is valid');
 if (zm_token) {
     // Token exists, confirm it and login
     let options = {
@@ -112,22 +118,38 @@ if (zm_token) {
     }
 
     var zm_url = zm_url_base + '/api/groups.json?token=' + store.get('zmToken')
+
+    console.log('Checking session...', zm_url);
 }
 
 // Checking session status    
+console.log('Checking session status');
+obj_login = document.getElementById('login-entry');
 const check_session = async () => {
     try {
+        console.log('Checking session...', zm_url);
         const resp = await axios.get(zm_url, {headers: headers});
+        console.log('Session is valid?');
+        console.log(resp.status)
         if (resp.status == 200) {
             session_live = true;
+            // hide modal obj_login
+            console.log('Session is valid');
+            obj_login.style.display = "none";
             return true;
         } else {
             session_live = false;
+            console.log('Session is invalid', resp.status);
+            // show modal obj_login
+            obj_login.style.display = "block";
             return false;
         }
     } catch (err) {
         // Handle Error Here
+        console.log('Session is invalid');
         console.error(err);
+        // show modal obj_login
+        obj_login.style.display = "block";
         return false;
     }
 }
