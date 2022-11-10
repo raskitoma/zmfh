@@ -9,7 +9,7 @@
   "author": "Raskitoma - https://raskitoma.com",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^16.0.5"
+    "electron": "^18.3.7"
   },
   "dependencies": {
     "axios": "^0.24.0",
