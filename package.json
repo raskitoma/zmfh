@@ -16,7 +16,7 @@
     "electron-json-config": "^1.5.3",
     "electron-store": "^8.0.1",
     "electron-window-state": "^5.0.3",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "jquery": "^3.6.0",
     "jsqr": "^1.4.0",
     "mjpeg-camera": "^2.0.0",
